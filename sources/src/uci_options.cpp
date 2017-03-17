@@ -24,7 +24,9 @@ If not, see <http://www.gnu.org/licenses/>.
 void PrintUciOptions(void) {
 
   printf("option name Hash type spin default 16 min 1 max 4096\n");
+#ifdef USE_THREADS
   printf("option name Threads type spin default %d min 1 max 4\n", Glob.thread_no);
+#endif
   printf("option name Clear Hash type button\n");
 
   if (Glob.use_personality_files)
@@ -59,7 +61,7 @@ void PrintUciOptions(void) {
     printf("option name PiecePressure type spin default %d min 0 max 500\n", Par.threats_weight);
 
     printf("option name PassedPawns type spin default %d min 0 max 500\n", Par.passers_weight);
-    printf("option name PaswnStructure type spin default %d min 0 max 500\n", Par.struct_weight);
+    printf("option name PawnStructure type spin default %d min 0 max 500\n", Par.struct_weight);
     printf("option name PawnShield type spin default %d min 0 max 500\n", Par.shield_weight);
     printf("option name PawnStorm type spin default %d min 0 max 500\n", Par.storm_weight);
     printf("option name Outposts type spin default %d min 0 max 500\n", Par.outposts_weight);
@@ -81,7 +83,9 @@ void PrintUciOptions(void) {
     printf("option name SlowMover type spin default %d min 10 max 500\n", Par.time_percentage);
     printf("option name Selectivity type spin default %d min 10 max 500\n", Par.hist_perc);
     printf("option name SearchSkill type spin default %d min 0 max 10\n", Par.search_skill);
+#ifdef USE_RISKY_PARAMETER
 	printf("option name RiskyDepth type spin default %d min 0 max 10\n", Par.riskydepth);
+#endif
   }
   printf("option name UseBook type check default false\n");
   printf("option name GuideBookFile type string default guide.bin\n");
@@ -116,8 +120,10 @@ void ParseSetoption(char *ptr) {
   }
   if (strcmp(name, "Hash") == 0                     || strcmp(name, "hash") == 0)              {
     AllocTrans(atoi(value));
+#ifdef USE_THREADS
   } else if (strcmp(name, "Threads") == 0           || strcmp(name, "threads") == 0)           {
     Glob.thread_no = (atoi(value));
+#endif
   } else if (strcmp(name, "Clear Hash") == 0        || strcmp(name, "clear hash") == 0)        {
     ClearTrans();
   } else if (strcmp(name, "PawnValue") == 0         || strcmp(name, "pawnvalue") == 0)         {
@@ -279,9 +285,11 @@ void ParseSetoption(char *ptr) {
   } else if (strcmp(name, "SearchSkill") == 0       || strcmp(name, "searchskill") == 0)    {
     Par.search_skill = atoi(value);
 	Glob.should_clear = 1;
+#ifdef USE_RISKY_PARAMETER
   } else if (strcmp(name, "RiskyDepth") == 0       || strcmp(name, "riskydepth") == 0)    {
     Par.riskydepth = atoi(value);
 	Glob.should_clear = 1;
+#endif
   } else if (strcmp(name, "SlowMover") == 0         || strcmp(name, "slowmover") == 0)      {
     Par.time_percentage = atoi(value);
   } else if (strcmp(name, "Selectivity") == 0       || strcmp(name, "selectivity") == 0)    {
